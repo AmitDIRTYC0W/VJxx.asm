@@ -6,6 +6,7 @@
 // See http://www.dragonwins.com/domains/getteched/bmp/bmpfileformat.htm and
 // https://en.wikipedia.org/wiki/BMP_file_format#File_structure.
 
+// This struct represents the binary structure of a Windows BMP v3 file header.
 struct bmp_file_header {
   // These characters represent the file type; 'BM' is for Windows BMP
   // files.
@@ -20,8 +21,8 @@ struct bmp_file_header {
   
   // This fields stores the offset to the start of the pixel data, from the
   // start of the file in bytes. 
-  unsigned int offBits;
-};
+  unsigned int off_bits;
+} __attribute__((__packed__));
 
 int read_bmp_file_header(FILE *f) {
   // Load the header to memory.

@@ -13,6 +13,8 @@
   "  -h, --help     display this help and exit\n"
 
 int main(int argc, char *argv[]) {
+  int res;
+
   // Check validity of the command line arguments.
   if (argc != 2) {
     fputs("ERROR: invalid usage\n", stderr);
@@ -38,7 +40,11 @@ int main(int argc, char *argv[]) {
     return EXIT_FAILURE;
   }
   
-  read_bmp_file(f);
+  // Load the picture to memory.
+  struct image picture;
+  if ((res = read_bmp_file(f, &picture)) >= 0) {
+    return res;
+  }
   
   fclose(f);
   

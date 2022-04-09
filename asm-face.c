@@ -12,39 +12,33 @@
   "\n" \
   "  -h, --help     display this help and exit\n"
 
-// This function parses the command line arguments.
-const char * parse_arguments(int argc, char *argv[], int *status) {
-  if (argc == 2) {
-    if (!strcmp("-h", argv[1]) || !strcmp("--help", argv[1])) {
-      printf(HELP_MESSAGE, argv[0]);
-      *status = EXIT_SUCCESS;
-    } else {      
-      *status = -1;
-    }
-  } else {
-    fputs("ERROR: invalid usage\n", stderr);
-    *status = EXIT_FAILURE;
-  }
-  
-  return argv[1];
-}
-
 int main(int argc, char *argv[]) {
-  int status;
-  
-  const char *filename = parse_arguments(argc, argv, &status);
-  if (status >= 0) {
-    return status;
+  // Check validity of the command line arguments.
+  if (argc != 2) {
+    fputs("ERROR: invalid usage\n", stderr);
+    return EXIT_FAILURE;
   }
 
+  // If asked to, print an help message.
+  if (!strcmp("-h", argv[1]) || !strcmp("--help", argv[1])) {
+    printf(HELP_MESSAGE, argv[0]);
+    return EXIT_SUCCESS;
+  } 
+  
+  // Read FILE.
   FILE *f;
-  f = fopen(filename, "rb");
+  if (!strcmp("-", argv[1])) {
+    f = stdin;
+  } else {
+    f = fopen(argv[1], "rb");
+  }
+  
   if (f == NULL) {
     perror("ERROR: cannot read FILE");
     return EXIT_FAILURE;
   }
   
-  read_bmp_file(f, &status);
+  read_bmp_file(f);
   
   fclose(f);
   

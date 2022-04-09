@@ -5,6 +5,6 @@
 
 // This function reads a Windows BMP file and loads it to memory. It may
 // print warnings to stderr. 
-void read_bmp_file(FILE *, int *);
+int read_bmp_file(FILE *);
 
 #endif

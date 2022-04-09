@@ -23,7 +23,7 @@ struct bmp_file_header {
   unsigned int offBits;
 };
 
-void read_bmp_file_header(FILE *f, int *status) {
+int read_bmp_file_header(FILE *f) {
   // Load the header to memory.
   struct bmp_file_header contents;
   fread(&contents, sizeof(struct bmp_file_header), 1, f);
@@ -31,7 +31,7 @@ void read_bmp_file_header(FILE *f, int *status) {
   // Assert the file is a Windows BMP file.
   if (memcmp(contents.type, "BM", sizeof(contents.type))) {
     fputs("ERROR: FILE is not a Windows BMP file.\n", stderr);
-    *status = EXIT_FAILURE;
+    return EXIT_FAILURE;
   }
   
   // Skip checking the file size make sense, assume the file is valid.
@@ -40,8 +40,16 @@ void read_bmp_file_header(FILE *f, int *status) {
   if (contents.reserved1 != 0 || contents.reserved2 != 0) {
     fputs("WARNING: FILE utilises unsupported format extensions.\n", stderr);
   }
+  
+  return -1;
 }
 
-void read_bmp_file(FILE *f, int *status) {
-  read_bmp_file_header(f, status);
+int read_bmp_file(FILE *f) {
+  int res;
+  
+  if ((res = read_bmp_file_header(f)) >= 0) {
+    return res;
+  }
+  
+  return -1;
 }

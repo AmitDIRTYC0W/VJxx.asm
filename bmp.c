@@ -151,7 +151,7 @@ unsigned char read_bmp_pixel_data(FILE *f, struct image *img) {
     
     // TODO Use memory in a more clever way, we _need_ padding.
     for (unsigned int x = 0; x < img->width; x++) {
-      img->values[y * img->width + x] = buff[x].g;
+      img->values[img->width * (img->height - y - 1) + x] = buff[x].g;
     }
   }
     

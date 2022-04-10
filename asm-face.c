@@ -48,5 +48,14 @@ int main(int argc, char *argv[]) {
   
   fclose(f);
   
+  for (unsigned int y = 0; y < picture.height; y++) {
+      for (unsigned int x = 0; x < picture.width; x++) {
+          printf("%03d ", picture.values[y * picture.width + x]);
+      }
+      putc('\n', stdout);
+  }
+  
+  free(picture.values);
+  
   return 0;
 }

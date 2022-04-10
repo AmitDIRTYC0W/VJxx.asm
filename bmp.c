@@ -33,17 +33,23 @@ struct bmp_file_header {
 } __attribute__((__packed__));
 
 // This function parses BMP file headers and verifies that f is a BMP file. It
-// assumes the cursor is at the beginning of the file.
-int read_bmp_file_header(FILE *f) {
+// retrieves the address of the pixel data in bytes from the file's beginning.
+// It assumes the cursor is at the beginning of the file.
+int read_bmp_file_header(FILE *f, unsigned int *pixel_data) {
   // Load the header to memory.
   struct bmp_file_header contents;
-  fread(&contents, sizeof(struct bmp_file_header), 1, f);
+  if (fread(&contents, sizeof(struct bmp_file_header), 1, f) < 1) {
+    perror("ERROR: Whilst reading FILE");
+    return EXIT_FAILURE;
+  }
   
   // Assert the file is a Windows BMP file.
   if (memcmp(contents.type, "BM", sizeof(contents.type))) {
     fputs("ERROR: FILE is not a Windows BMP file.\n", stderr);
     return EXIT_FAILURE;
   }
+  
+  *pixel_data = contents.off_bits;
   
   // Skip checking the file size make sense, assume the file is valid.
   
@@ -80,7 +86,10 @@ struct bmp_image_header {
 int read_bmp_image_header(FILE *f, struct image *img) {
   // Load the header to memory.
   struct bmp_image_header contents;
-  fread(&contents, sizeof(struct bmp_image_header), 1, f);
+  if (fread(&contents, sizeof(struct bmp_image_header), 1, f) < 1) {
+    perror("ERR:R Whilst reading FILE");
+    return EXIT_FAILURE;
+  }
   
   // Store the width and the height of the image.
   if (contents.height > 0) {
@@ -108,14 +117,63 @@ int read_bmp_image_header(FILE *f, struct image *img) {
   return -1;
 }
 
+// This structure represents a pixel in a BMP image pixel data.
+struct rgb888 {
+  // Red, green and blue values.
+  unsigned char r, g, b;
+} __attribute__((__packed__));
+
+// This function load an image's pixel data to memory.
+int read_bmp_pixel_data(FILE *f, struct image *img) {
+  img->values = malloc(img->width * img->height);
+  if (img->values == NULL) {
+    perror("ERROR: Cannot allocate memory for the image");
+    return EXIT_FAILURE;
+  }
+
+  // The size of the padding at the end of each row  in the file in bytes.
+  size_t row_padding = 3 - (((img->width * sizeof(struct rgb888)) - 1) | 0x3);
+  
+  for (unsigned int y = 0; y < img->height; y++) {
+    // TODO There might be a more efficent way of doing this.
+    
+    struct rgb888 buff[img->width];
+    
+    if (fread(&buff, sizeof(struct rgb888), img->width, f) < img->width) {
+      perror("ERROR: Whilst reading FILE");
+      return EXIT_FAILURE;
+    }
+    
+    if (fseek(f, row_padding, SEEK_CUR) != 0) {
+      perror("ERROR: Whilst reading FILE");
+      return EXIT_FAILURE;
+    }
+    
+    // TODO Use memory in a more clever way, we _need_ padding.
+    for (unsigned int x = 0; x < img->width; x++) {
+      img->values[y * img->width + x] = buff[x].g;
+    }
+  }
+    
+  return -1;
+}
+
+
 int read_bmp_file(FILE *f, struct image *img) {
   int res;
   
-  if ((res = read_bmp_file_header(f)) >= 0) {
+  unsigned int pixel_data;
+  if ((res = read_bmp_file_header(f, &pixel_data)) >= 0) {
     return res;
   }
 
   if ((res = read_bmp_image_header(f, img)) >= 0) {
+    return res;
+  }
+  
+  fseek(f, pixel_data, SEEK_SET);
+  
+  if ((res = read_bmp_pixel_data(f, img)) >= 0) {
     return res;
   }
   

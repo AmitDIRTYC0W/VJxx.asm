@@ -48,3 +48,17 @@ unsigned char integrate_image(struct integral_image * dst, struct image * src) {
   
   return EXIT_SUCCESS;
 }
+
+unsigned int sum_area(
+  struct integral_image img,
+  unsigned int x0,
+  unsigned int y0,
+  unsigned int x1,
+  unsigned int y1
+) {
+  return
+    img.values[img.width * y1 + x1]
+    - img.values[img.width * y0 + x1]
+    - img.values[img.width * y1 + x0]
+    + img.values[img.width * y0 + x0];
+}

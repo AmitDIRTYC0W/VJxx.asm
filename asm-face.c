@@ -47,13 +47,6 @@ int main(int argc, char *argv[]) {
   
   fclose(f);
   
-  for (unsigned int y = 0; y < picture.height; y++) {
-    for (unsigned int x = 0; x < picture.width; x++) {
-      printf("%03d ", picture.values[y * picture.width + x]);
-    }
-    putc('\n', stdout);
-  }
-  
   // Calculate the integral image.
   struct integral_image integral_img;
   if (integrate_image(&integral_img, &picture) > 0) {
@@ -62,13 +55,11 @@ int main(int argc, char *argv[]) {
   
   free(picture.values);
   
-  puts("INTEGRAL IMAGE:");
-  for (unsigned int y = 0; y < picture.height; y++) {
-    for (unsigned int x = 0; x < picture.width; x++) {
-      printf("%03u ", integral_img.values[y * picture.width + x]);
-    }
-    putc('\n', stdout);
-  }
+  int A0 = sum_area(integral_img, 390, 640, 550, 805);
+  int A1 = sum_area(integral_img, 600, 460, 700, 500);
+  
+  printf("AREA #0: %d\n", A0 / (550 - 390) / (805 - 640));
+  printf("AREA #1: %d\n", A1 / (700 - 600) / (800 - 460));
   
   free(integral_img.values);
   

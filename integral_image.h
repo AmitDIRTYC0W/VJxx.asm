@@ -17,4 +17,14 @@ struct integral_image {
 // This function generates integral images from regular images.
 unsigned char integrate_image(struct integral_image *, struct image *);
 
+// This function returns the sum of all the values in a given rectuangular area
+// in an image.
+unsigned int sum_area(
+  struct integral_image,
+  unsigned int,
+  unsigned int,
+  unsigned int,
+  unsigned int
+);
+
 #endif

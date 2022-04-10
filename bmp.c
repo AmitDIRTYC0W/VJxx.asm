@@ -3,10 +3,18 @@
 #include <stdlib.h>
 #include <string.h>
 
+// This parser parses most Windows BMP v3 files. It should be forgiving and
+// be able to parse other Windows BMP versions, and even malformed files.
+// However, files must
+// • be uncompressed,
+// • use the RGB888 pixel format,
+// • contain only one image
+// • and have their pixel data ordered from bottom to top.
+
 // See http://www.dragonwins.com/domains/getteched/bmp/bmpfileformat.htm and
 // https://en.wikipedia.org/wiki/BMP_file_format#File_structure.
 
-// This struct represents the binary structure of a Windows BMP v3 file header.
+// This struct represents the binary structure of a Windows BMP file header.
 struct bmp_file_header {
   // These characters represent the file type; 'BM' is for Windows BMP
   // files.

@@ -2,7 +2,8 @@ CFLAGS = -Wall -Wextra -O3
 
 OBJS = \
  asm-face.o \
- bmp.o
+ bmp.o \
+ integral_image.o
 
 .SUFFIXES: .o .c
 .PHONY: default install clean

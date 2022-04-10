@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "bmp.h"
+#include "integral_image.h"
 
 #define HELP_MESSAGE \
   "Usage: %s [FILE]\n" \
@@ -47,13 +48,29 @@ int main(int argc, char *argv[]) {
   fclose(f);
   
   for (unsigned int y = 0; y < picture.height; y++) {
-      for (unsigned int x = 0; x < picture.width; x++) {
-          printf("%03d ", picture.values[y * picture.width + x]);
-      }
-      putc('\n', stdout);
+    for (unsigned int x = 0; x < picture.width; x++) {
+      printf("%03d ", picture.values[y * picture.width + x]);
+    }
+    putc('\n', stdout);
+  }
+  
+  // Calculate the integral image.
+  struct integral_image integral_img;
+  if (integrate_image(&integral_img, &picture) > 0) {
+    return EXIT_FAILURE;
   }
   
   free(picture.values);
+  
+  puts("INTEGRAL IMAGE:");
+  for (unsigned int y = 0; y < picture.height; y++) {
+    for (unsigned int x = 0; x < picture.width; x++) {
+      printf("%03u ", integral_img.values[y * picture.width + x]);
+    }
+    putc('\n', stdout);
+  }
+  
+  free(integral_img.values);
   
   return 0;
 }

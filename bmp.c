@@ -35,7 +35,7 @@ struct bmp_file_header {
 // This function parses BMP file headers and verifies that f is a BMP file. It
 // retrieves the address of the pixel data in bytes from the file's beginning.
 // It assumes the cursor is at the beginning of the file.
-int read_bmp_file_header(FILE *f, unsigned int *pixel_data) {
+unsigned char read_bmp_file_header(FILE *f, unsigned int *pixel_data) {
   // Load the header to memory.
   struct bmp_file_header contents;
   if (fread(&contents, sizeof(struct bmp_file_header), 1, f) < 1) {
@@ -58,7 +58,7 @@ int read_bmp_file_header(FILE *f, unsigned int *pixel_data) {
     fputs("WARNING: FILE utilises unsupported format extensions.\n", stderr);
   }
   
-  return -1;
+  return EXIT_SUCCESS;
 }
 
 struct bmp_image_header {
@@ -83,12 +83,17 @@ struct bmp_image_header {
 
 // This function parses BMP v3 image headers and stores revelevant data from
 // them. It assumes the cursor is after the file header.
-int read_bmp_image_header(FILE *f, struct image *img) {
+unsigned char read_bmp_image_header(FILE *f, struct image *img) {
   // Load the header to memory.
   struct bmp_image_header contents;
   if (fread(&contents, sizeof(struct bmp_image_header), 1, f) < 1) {
     perror("ERR:R Whilst reading FILE");
     return EXIT_FAILURE;
+  }
+  
+  if (contents.bit_count != 24) {
+      fputs("ERROR: FILE uses an unsupported pixel format.\n", stderr);
+      return EXIT_FAILURE;
   }
   
   // Store the width and the height of the image.
@@ -108,13 +113,8 @@ int read_bmp_image_header(FILE *f, struct image *img) {
   if (contents.colour_planes != 1) {
       fputs("WARNING: FILE is uses an odd no. of colour planes.\n", stderr);
   }
-  
-  if (contents.bit_count != 24) {
-      fputs("ERROR: FILE uses an unsupported pixel format.\n", stderr);
-      return EXIT_FAILURE;
-  }
 
-  return -1;
+  return EXIT_SUCCESS;
 }
 
 // This structure represents a pixel in a BMP image pixel data.
@@ -124,7 +124,7 @@ struct rgb888 {
 } __attribute__((__packed__));
 
 // This function load an image's pixel data to memory.
-int read_bmp_pixel_data(FILE *f, struct image *img) {
+unsigned char read_bmp_pixel_data(FILE *f, struct image *img) {
   img->values = malloc(img->width * img->height);
   if (img->values == NULL) {
     perror("ERROR: Cannot allocate memory for the image");
@@ -155,27 +155,25 @@ int read_bmp_pixel_data(FILE *f, struct image *img) {
     }
   }
     
-  return -1;
+  return EXIT_SUCCESS;
 }
 
 
-int read_bmp_file(FILE *f, struct image *img) {
-  int res;
-  
+unsigned char read_bmp_file(FILE *f, struct image *img) {
   unsigned int pixel_data;
-  if ((res = read_bmp_file_header(f, &pixel_data)) >= 0) {
-    return res;
+  if (read_bmp_file_header(f, &pixel_data) != EXIT_SUCCESS) {
+    return EXIT_FAILURE;
   }
 
-  if ((res = read_bmp_image_header(f, img)) >= 0) {
-    return res;
+  if (read_bmp_image_header(f, img) != EXIT_SUCCESS) {
+    return EXIT_FAILURE;
   }
   
   fseek(f, pixel_data, SEEK_SET);
   
-  if ((res = read_bmp_pixel_data(f, img)) >= 0) {
-    return res;
+  if (read_bmp_pixel_data(f, img) > 0) {
+    return EXIT_FAILURE;
   }
   
-  return -1;
+  return EXIT_SUCCESS;
 }

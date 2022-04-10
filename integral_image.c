@@ -7,7 +7,7 @@
 #define INT_PIXEL_MAX (((long)2 << 32) - 1)
 #define MAX_PIXELS (INT_PIXEL_MAX / SRC_PIXEL_MAX)
 
-unsigned char integrate_image(struct integral_image * dst, struct image * src) {
+unsigned char integrate_image(struct integral_image *dst, struct image *src) {
   if ((long)(src->width) * (long)(src->height) > MAX_PIXELS) {
     fputs("ERROR: The image contains too many pixels🥵\n", stderr);
     return EXIT_FAILURE;

@@ -29,9 +29,13 @@ int main() {
     return EXIT_FAILURE;
   }
 
-  if (sum_area (integral_img, 1, 1, 5, 3) != EXPECTED_SUM) {
+  free(picture.values);
+
+  if (sum_area(integral_img, 1, 1, 5, 3) != EXPECTED_SUM) {
     return EXIT_FAILURE;
   }
+
+  free(integral_img.values);
 
   return EXIT_SUCCESS;
 }

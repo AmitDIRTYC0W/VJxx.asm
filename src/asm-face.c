@@ -51,6 +51,7 @@ int main(int argc, char *argv[]) {
   // Calculate the integral image.
   struct integral_image integral_img;
   if (integrate_image(&integral_img, picture) > 0) {
+    free(picture.values);
     return EXIT_FAILURE;
   }
 

@@ -142,11 +142,13 @@ unsigned char read_bmp_pixel_data(FILE *f, struct image *img) {
     
     if (fread(&buff, sizeof(struct rgb888), img->width, f) < img->width) {
       perror("ERROR: Whilst reading FILE");
+      free(img->values);
       return EXIT_FAILURE;
     }
     
     if (fseek(f, row_padding, SEEK_CUR) != 0) {
       perror("ERROR: Whilst reading FILE");
+      free(img->values);
       return EXIT_FAILURE;
     }
     

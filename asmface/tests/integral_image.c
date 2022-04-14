@@ -34,6 +34,8 @@ int main() {
     return EXIT_FAILURE;
   }
 
+  free(picture.values);
+
   for (int y = 0; y < 4; y++) {
     for (int x = 0; x < 6; x++) {
       printf("%4d ", integral_img.values[integral_img.width * y + x]);
@@ -50,6 +52,8 @@ int main() {
       return EXIT_FAILURE;
     }
   }
+
+  free(integral_img.values);
 
   return EXIT_SUCCESS;
 }

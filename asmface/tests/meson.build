@@ -12,3 +12,19 @@ test(
 #test('BMP parser (non-fully-supported file)', ...)
 #test('BMP parser (unsupported file)', ...)
 #test('BMP parser (non-BMP file)', ...)
+test(
+	'Integral image generation',
+	executable(
+		'integral_image',
+		'integral_image.c',
+		dependencies: asmface_dep
+	),
+)
+test(
+	'Area summing',
+	executable(
+		'sum_area',
+		'sum_area.c',
+		dependencies: asmface_dep
+	),
+)

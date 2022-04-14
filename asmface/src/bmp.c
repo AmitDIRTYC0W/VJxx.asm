@@ -68,9 +68,10 @@ struct bmp_image_header {
   // This represents the width of the image in pixels.
   unsigned int width;
   
-  // This reprsesents the height of the image in pixels. The pixel data is ordered from botto
-  // to top. If this value is negative, it is ordered from top to bottom.
-  signed int height;
+  // This reprsesents the height of the image in pixels. The pixel data is
+  // ordered from botto to top. If this value is negative, it is ordered from
+  // top to bottom.
+  int height;
   
   // This represents the number of colour planes in the image (must be 1).
   unsigned short colour_planes;
@@ -132,7 +133,7 @@ unsigned char read_bmp_pixel_data(FILE *f, struct image *img) {
   }
 
   // The size of the padding at the end of each row  in the file in bytes.
-  size_t row_padding = 3 - (((img->width * sizeof(struct rgb888)) - 1) | 0x3);
+  size_t row_padding = 3 - ((img->width * sizeof(struct rgb888) - 1) & 0x3);
   
   for (unsigned int y = 0; y < img->height; y++) {
     // TODO There might be a more efficent way of doing this.
@@ -151,8 +152,10 @@ unsigned char read_bmp_pixel_data(FILE *f, struct image *img) {
     
     // TODO Use memory in a more clever way, we _need_ padding.
     for (unsigned int x = 0; x < img->width; x++) {
+      printf("%02x ", buff[x].g);
       img->values[img->width * (img->height - y - 1) + x] = buff[x].g;
     }
+    puts("");
   }
     
   return EXIT_SUCCESS;

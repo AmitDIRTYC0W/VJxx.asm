@@ -24,14 +24,16 @@ unsigned char integrate_image(struct integral_image *dst, struct image src) {
   }
   
   // Create zero paddings.
-  memset(dst->values, 0, dst->width - 1);
+  for (unsigned int x = 0; x < dst->width; x++) {
+    dst->values[x] = 0;
+  }
   for (unsigned int y = 1; y < dst->height; y++) {
     dst->values[dst->width * y] = 0;
   }
   
   // Integrate the image
-  for (unsigned int y = 0; y < dst->height; y++) {
-    for (unsigned int x = 0; x < dst->width; x++) {
+  for (unsigned int y = 0; y < src.height; y++) {
+    for (unsigned int x = 0; x < src.width; x++) {
       dst->values[dst->width * (y + 1) + x + 1] =
         src.values[dst->width * y + x]
         + dst->values[dst->width * (y + 1) + x]
@@ -50,18 +52,10 @@ unsigned int sum_area(
   unsigned int x1,
   unsigned int y1
 ) {
-  printf(
-    "(x0, y0): %d\n(x1, y0): %d\n(x0, y1): %d\n(x1, y1): %d\n",
-    img.values[img.width * y0 + x0] / 255,
-    img.values[img.width * y0 + x1] / 255,
-    img.values[img.width * y1 + x0] / 255,
-    img.values[img.width * y1 + x1] / 255
-  );
-
-
   return
     img.values[img.width * y1 + x1]
     - img.values[img.width * y0 + x1]
     - img.values[img.width * y1 + x0]
     + img.values[img.width * y0 + x0];
 }
+

@@ -14,7 +14,7 @@
 #define EXPECTED_HEIGHT 3
 #define EXPECTED_SIZE EXPECTED_WIDTH * EXPECTED_HEIGHT
 
-int main(int, char * argv[]) {
+int main(int, char *argv[]) {
   char path[PATH_LENGTH];
   strcpy(path, argv[1]);
   strcat(path, "/checkers.bmp");

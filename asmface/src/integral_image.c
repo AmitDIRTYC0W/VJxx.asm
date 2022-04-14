@@ -35,7 +35,7 @@ unsigned char integrate_image(struct integral_image *dst, struct image src) {
   for (unsigned int y = 0; y < src.height; y++) {
     for (unsigned int x = 0; x < src.width; x++) {
       dst->values[dst->width * (y + 1) + x + 1] =
-        src.values[dst->width * y + x]
+        src.values[src.width * y + x]
         + dst->values[dst->width * (y + 1) + x]
         + dst->values[dst->width * y + x + 1]
         - dst->values[dst->width * y + x];

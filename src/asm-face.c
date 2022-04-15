@@ -57,9 +57,11 @@ int main(int argc, char *argv[]) {
 
   free(picture.values);
 
-  printf("HAAR #0: %d\n", horizontal_edge_feature(integral_img, 380, 690, 540, 910));
-  printf("HAAR #1: %d\n", horizontal_edge_feature(integral_img, 450, 800, 540, 830));
-  //printf("HAAR #2: %d\n", horizontal_edge_feature(integral_img, 0, 0, 1, 2));
+  printf("HAAR eyes: %d\n", haar_y3(integral_img, 420, 440, 490, 480));
+  printf("HAAR face: %d\n", haar_x3(integral_img, 980, 705, 1035, 750));
+  printf("HAAR legs/dress: %d\n", haar_y2(integral_img, 421, 1026, 531, 1129));
+  printf("HAAR belt: %d\n", haar_x2y2 (integral_img, 620, 630, 680, 725));
+  printf("HAAR cosplay thingy: %d\n", haar_x2y2 (integral_img, 380, 570, 475, 666));
   
   free(integral_img.values);
   

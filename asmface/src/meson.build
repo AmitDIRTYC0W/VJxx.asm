@@ -4,4 +4,8 @@ asmface_src = [
   'integral_image.c',
 ]
 
-asmface_lib = library('asmface', asmface_src, include_directories: asmface_inc)
+asmface_lib = static_library(
+	'asmface',
+	asmface_src,
+	include_directories: asmface_inc
+)

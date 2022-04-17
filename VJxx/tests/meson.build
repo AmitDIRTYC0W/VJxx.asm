@@ -5,7 +5,7 @@ test(
 	executable(
 		'bmp_parser_standard',
 		'bmp_parser_standard.c',
-		dependencies: asmface_dep
+		dependencies: vjxx_dep
 	),
 	args: [ pictures_dir ],
 )
@@ -17,7 +17,7 @@ test(
 	executable(
 		'integral_image',
 		'integral_image.c',
-		dependencies: asmface_dep
+		dependencies: vjxx_dep
 	),
 )
 test(
@@ -25,6 +25,6 @@ test(
 	executable(
 		'sum_area',
 		'sum_area.c',
-		dependencies: asmface_dep
+		dependencies: vjxx_dep
 	),
 )

@@ -1,4 +1,4 @@
-#include "integral_image.h"
+#include "VJxx/integral_image.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -8,7 +8,7 @@
 #define INT_PIXEL_MAX (((long)2 << 32) - 1)
 #define MAX_PIXELS (INT_PIXEL_MAX / SRC_PIXEL_MAX)
 
-unsigned char integrate_image(struct integral_image *dst, struct image src) {
+unsigned char vjxx_integrate_image(struct vjxx_integral_image *dst, struct vjxx_image src) {
   if ((long)(src.width) * (long)(src.height) > MAX_PIXELS) {
     fputs("ERROR: The image contains too many pixels🥵\n", stderr);
     return EXIT_FAILURE;
@@ -45,8 +45,8 @@ unsigned char integrate_image(struct integral_image *dst, struct image src) {
   return EXIT_SUCCESS;
 }
 
-unsigned int sum_area(
-  struct integral_image img,
+unsigned int vjxx_sum_area(
+  struct vjxx_integral_image img,
   unsigned int x0,
   unsigned int y0,
   unsigned int x1,
@@ -59,3 +59,6 @@ unsigned int sum_area(
     + img.values[img.width * y0 + x0];
 }
 
+#undef SRC_PIXEL_MAX
+#undef INT_PIXEL_MAX
+#undef MAX_PIXELS

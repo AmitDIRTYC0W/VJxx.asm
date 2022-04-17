@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "bmp.h"
-#include "haar_features.h"
-#include "integral_image.h"
+#include "VJxx/bmp.h"
+#include "VJxx/haar_features.h"
+#include "VJxx/integral_image.h"
 
 #define HELP_MESSAGE \
   "Usage: %s [FILE]\n" \
@@ -41,27 +41,27 @@ int main(int argc, char *argv[]) {
   }
   
   // Load the picture to memory.
-  struct image picture;
-  if (read_bmp_file(f, &picture) > 0) {
+  struct vjxx_image picture;
+  if (vjxx_read_bmp_file(f, &picture) > 0) {
     return EXIT_FAILURE;
   }
   
   fclose(f);
   
   // Calculate the integral image.
-  struct integral_image integral_img;
-  if (integrate_image(&integral_img, picture) > 0) {
+  struct vjxx_integral_image integral_img;
+  if (vjxx_integrate_image(&integral_img, picture) > 0) {
     free(picture.values);
     return EXIT_FAILURE;
   }
 
   free(picture.values);
 
-  printf("HAAR eyes: %d\n", haar_y3(integral_img, 420, 440, 490, 480));
-  printf("HAAR face: %d\n", haar_x3(integral_img, 980, 705, 1035, 750));
-  printf("HAAR legs/dress: %d\n", haar_y2(integral_img, 421, 1026, 531, 1129));
-  printf("HAAR belt: %d\n", haar_x2y2 (integral_img, 620, 630, 680, 725));
-  printf("HAAR cosplay thingy: %d\n", haar_x2y2 (integral_img, 380, 570, 475, 666));
+  printf("HAAR eyes: %d\n", vjxx_haar_y3(integral_img, 420, 440, 490, 480));
+  printf("HAAR face: %d\n", vjxx_haar_x3(integral_img, 980, 705, 1035, 750));
+  printf("HAAR legs/dress: %d\n", vjxx_haar_y2(integral_img, 421, 1026, 531, 1129));
+  printf("HAAR belt: %d\n", vjxx_haar_x2y2 (integral_img, 620, 630, 680, 725));
+  printf("HAAR cosplay thingy: %d\n", vjxx_haar_x2y2 (integral_img, 380, 570, 475, 666));
   
   free(integral_img.values);
   

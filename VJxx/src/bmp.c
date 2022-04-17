@@ -1,4 +1,4 @@
-#include "bmp.h"
+#include "VJxx/bmp.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -15,7 +15,7 @@
 // https://en.wikipedia.org/wiki/BMP_file_format#File_structure.
 
 // This struct represents the binary structure of a Windows BMP file header.
-struct bmp_file_header {
+struct vjxx_bmp_file_header {
   // These characters represent the file type; 'BM' is for Windows BMP
   // files.
   char type[2];
@@ -35,10 +35,10 @@ struct bmp_file_header {
 // This function parses BMP file headers and verifies that f is a BMP file. It
 // retrieves the address of the pixel data in bytes from the file's beginning.
 // It assumes the cursor is at the beginning of the file.
-unsigned char read_bmp_file_header(FILE *f, unsigned int *pixel_data) {
+unsigned char vjxx_read_bmp_file_header(FILE *f, unsigned int *pixel_data) {
   // Load the header to memory.
-  struct bmp_file_header contents;
-  if (fread(&contents, sizeof(struct bmp_file_header), 1, f) < 1) {
+  struct vjxx_bmp_file_header contents;
+  if (fread(&contents, sizeof(struct vjxx_bmp_file_header), 1, f) < 1) {
     perror("ERROR: Whilst reading FILE");
     return EXIT_FAILURE;
   }
@@ -61,7 +61,7 @@ unsigned char read_bmp_file_header(FILE *f, unsigned int *pixel_data) {
   return EXIT_SUCCESS;
 }
 
-struct bmp_image_header {
+struct vjxx_bmp_image_header {
   // This represents the size of the header in bytes (should be 40).
   unsigned int header_size;
   
@@ -84,10 +84,10 @@ struct bmp_image_header {
 
 // This function parses BMP v3 image headers and stores revelevant data from
 // them. It assumes the cursor is after the file header.
-unsigned char read_bmp_image_header(FILE *f, struct image *img) {
+unsigned char vjxx_read_bmp_image_header(FILE *f, struct vjxx_image *img) {
   // Load the header to memory.
-  struct bmp_image_header contents;
-  if (fread(&contents, sizeof(struct bmp_image_header), 1, f) < 1) {
+  struct vjxx_bmp_image_header contents;
+  if (fread(&contents, sizeof(struct vjxx_bmp_image_header), 1, f) < 1) {
     perror("ERR:R Whilst reading FILE");
     return EXIT_FAILURE;
   }
@@ -119,13 +119,13 @@ unsigned char read_bmp_image_header(FILE *f, struct image *img) {
 }
 
 // This structure represents a pixel in a BMP image pixel data.
-struct rgb888 {
+struct vjxx_rgb888 {
   // Red, green and blue values.
   unsigned char r, g, b;
 } __attribute__((__packed__));
 
 // This function load an image's pixel data to memory.
-unsigned char read_bmp_pixel_data(FILE *f, struct image *img) {
+unsigned char vjxx_read_bmp_pixel_data(FILE *f, struct vjxx_image *img) {
   img->values = malloc(img->width * img->height);
   if (img->values == NULL) {
     perror("ERROR: Cannot allocate memory for the image");
@@ -133,14 +133,14 @@ unsigned char read_bmp_pixel_data(FILE *f, struct image *img) {
   }
 
   // The size of the padding at the end of each row  in the file in bytes.
-  size_t row_padding = 3 - ((img->width * sizeof(struct rgb888) - 1) & 0x3);
+  size_t row_padding = 3 - ((img->width * sizeof(struct vjxx_rgb888) - 1) & 0x3);
   
   for (unsigned int y = 0; y < img->height; y++) {
     // TODO There might be a more efficent way of doing this.
     
-    struct rgb888 buff[img->width];
+    struct vjxx_rgb888 buff[img->width];
     
-    if (fread(&buff, sizeof(struct rgb888), img->width, f) < img->width) {
+    if (fread(&buff, sizeof(struct vjxx_rgb888), img->width, f) < img->width) {
       perror("ERROR: Whilst reading FILE");
       free(img->values);
       return EXIT_FAILURE;
@@ -161,20 +161,19 @@ unsigned char read_bmp_pixel_data(FILE *f, struct image *img) {
   return EXIT_SUCCESS;
 }
 
-
-unsigned char read_bmp_file(FILE *f, struct image *img) {
+unsigned char vjxx_read_bmp_file(FILE *f, struct vjxx_image *img) {
   unsigned int pixel_data;
-  if (read_bmp_file_header(f, &pixel_data) != EXIT_SUCCESS) {
+  if (vjxx_read_bmp_file_header(f, &pixel_data) != EXIT_SUCCESS) {
     return EXIT_FAILURE;
   }
 
-  if (read_bmp_image_header(f, img) != EXIT_SUCCESS) {
+  if (vjxx_read_bmp_image_header(f, img) != EXIT_SUCCESS) {
     return EXIT_FAILURE;
   }
   
   fseek(f, pixel_data, SEEK_SET);
   
-  if (read_bmp_pixel_data(f, img) > 0) {
+  if (vjxx_read_bmp_pixel_data(f, img) > 0) {
     return EXIT_FAILURE;
   }
   

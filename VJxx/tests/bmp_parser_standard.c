@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "bmp.h"
+#include "VJxx/bmp.h"
 
 #define PATH_LENGTH 256
 #define EXPECTED_VALUES { \
@@ -25,8 +25,8 @@ int main(int, char *argv[]) {
     return EXIT_FAILURE;
   }
 
-  struct image picture;
-  if (read_bmp_file(f, &picture) > 0) {
+  struct vjxx_image picture;
+  if (vjxx_read_bmp_file(f, &picture) > 0) {
     return EXIT_FAILURE;
   }
 

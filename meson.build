@@ -15,5 +15,5 @@ add_project_arguments(
 	language: 'c',
 )
 
-subdir('asmface')
+subdir('VJxx')
 subdir('src')

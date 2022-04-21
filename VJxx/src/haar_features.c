@@ -5,7 +5,7 @@
 
 // TODO Actually think about this code (i.e. maximum values and such).
 
-char vjxx_haar_x2(
+int vjxx_haar_x2(
 	struct vjxx_integral_image img,
 	unsigned int x0,
 	unsigned int y0,
@@ -18,7 +18,7 @@ char vjxx_haar_x2(
   return left - right;
 }
 
-char vjxx_haar_y2(
+int vjxx_haar_y2(
 	struct vjxx_integral_image img,
 	unsigned int x0,
 	unsigned int y0,
@@ -31,7 +31,7 @@ char vjxx_haar_y2(
 	return top - bottom;
 }
 
-char vjxx_haar_x3(
+int vjxx_haar_x3(
   struct vjxx_integral_image img,
   unsigned int x0,
   unsigned int y0,
@@ -46,7 +46,7 @@ char vjxx_haar_x3(
 }
 
 
-char vjxx_haar_y3(
+int vjxx_haar_y3(
   struct vjxx_integral_image img,
   unsigned int x0,
   unsigned int y0,
@@ -60,7 +60,7 @@ char vjxx_haar_y3(
   return top + bottom - middle;
 }
 
-char vjxx_haar_x2y2(
+int vjxx_haar_x2y2(
   struct vjxx_integral_image img,
   unsigned int x0,
   unsigned int y0,

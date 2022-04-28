@@ -70,7 +70,7 @@ int vjxx_haar_x2y2(
   unsigned int half_height = height >> 1;
   unsigned int top_left_value = vjxx_sum_area(img, x0, y0, x0 + half_width, y0 + half_height);
   unsigned int top_right_value = vjxx_sum_area(img, x0 + half_width + 1, y0, x0 + width, y0 + half_height);
-  unsigned int bottom_left_value = vjxx_sum_area(img, x0, y0 + half_height + 1, x0 + width, y0 + height);
+  unsigned int bottom_left_value = vjxx_sum_area(img, x0, y0 + half_height + 1, x0 + half_width, y0 + height);
   unsigned int bottom_right_value = vjxx_sum_area(img, x0 + half_width + 1, y0 + half_height + 1, x0 + width, y0 + height);
   return top_left_value + bottom_right_value - top_right_value - bottom_left_value;
 }

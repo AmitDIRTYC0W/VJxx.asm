@@ -44,3 +44,27 @@ test(
 		dependencies: vjxx_dep
 	),
 )
+test(
+	'X3 Haar feature',
+	executable(
+		'haar_x3',
+		'haar_x3.c',
+		dependencies: vjxx_dep
+	),
+)
+test(
+	'Y3 Haar feature',
+	executable(
+		'haar_y3',
+		'haar_y3.c',
+		dependencies: vjxx_dep
+	),
+)
+test(
+	'X2Y2 Haar feature',
+	executable(
+		'haar_x2y2',
+		'haar_x2y2.c',
+		dependencies: vjxx_dep
+	),
+)

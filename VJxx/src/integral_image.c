@@ -3,17 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-// Calculate the maximum no. of pixels that can be in a source image.
-#define SRC_PIXEL_MAX ((2 << 8) - 1)
-#define INT_PIXEL_MAX (((long)2 << 32) - 1)
-#define MAX_PIXELS (INT_PIXEL_MAX / SRC_PIXEL_MAX)
-
 unsigned char vjxx_integrate_image(struct vjxx_integral_image *dst, struct vjxx_image src) {
-  if ((long)(src.width) * (long)(src.height) > MAX_PIXELS) {
-    fputs("ERROR: The image contains too many pixels🥵\n", stderr);
-    return EXIT_FAILURE;
-  }
-
   dst->width = src.width + 1;
   dst->height = src.height + 1;
     

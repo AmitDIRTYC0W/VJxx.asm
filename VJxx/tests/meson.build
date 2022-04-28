@@ -36,3 +36,11 @@ test(
 		dependencies: vjxx_dep
 	),
 )
+test(
+	'Y2 Haar feature',
+	executable(
+		'haar_y2',
+		'haar_y2.c',
+		dependencies: vjxx_dep
+	),
+)

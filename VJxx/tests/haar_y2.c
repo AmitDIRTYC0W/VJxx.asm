@@ -15,7 +15,7 @@
 #define IN_HEIGHT 4
 #define IN_SIZE IN_WIDTH * IN_HEIGHT * sizeof(unsigned int)
 
-#define EXPECTED_VALUE -765
+#define EXPECTED_VALUE 0
 
 int main() {
   struct vjxx_integral_image integral_img;
@@ -24,7 +24,7 @@ int main() {
   const unsigned int in_values[] = IN_VALUES;
   integral_img.values = in_values;
 
-  if (vjxx_haar_x2(integral_img, 1, 0, 3, 3) != EXPECTED_VALUE) {
+  if (vjxx_haar_y2(integral_img, 0, 1, 4, 2) != EXPECTED_VALUE) {
     return EXIT_FAILURE;
   }
   

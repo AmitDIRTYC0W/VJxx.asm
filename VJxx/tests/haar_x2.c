@@ -15,7 +15,7 @@
 #define IN_HEIGHT 4
 #define IN_SIZE IN_WIDTH * IN_HEIGHT * sizeof(unsigned int)
 
-#define EXPECTED_VALUE -765
+#define EXPECTED_VALUE -1530
 
 int main() {
   struct vjxx_integral_image integral_img;

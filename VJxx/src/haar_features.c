@@ -14,7 +14,7 @@ int vjxx_haar_x2(
 ) {
 	unsigned int width = x1 - x0;
 	unsigned int left = vjxx_sum_area(img, x0, y0, ((x0 * 2) + width) / 2, y1);
-	unsigned int right = vjxx_sum_area(img, x0, y0, ((x0 * 2) + width) / 2 + 1, y1);
+	unsigned int right = vjxx_sum_area(img, x0, y0, ((x0 * 2) + width) / 2, y1);
   return left - right;
 }
 
@@ -27,7 +27,7 @@ int vjxx_haar_y2(
 ) {
 	unsigned int height = y1 - y0;
 	unsigned int top = vjxx_sum_area(img, x0, y0, x1, ((y0 * 2) + height) / 2);
-	unsigned int bottom = vjxx_sum_area(img, x0, ((y0 * 2) + height) / 2 + 1, x1, y1);
+	unsigned int bottom = vjxx_sum_area(img, x0, ((y0 * 2) + height) / 2, x1, y1);
 	return top - bottom;
 }
 
@@ -40,8 +40,8 @@ int vjxx_haar_x3(
 ) {
   unsigned int width = x1 - x0;
   unsigned int left = vjxx_sum_area(img, x0, y0, ((x0 * 3) + width) / 3, y1);
-  unsigned int middle = vjxx_sum_area(img, ((x0 * 3) + width) / 3 + 1, y0, ((x0 * 3) + 2 * width) / 3, y1);
-  unsigned int right = vjxx_sum_area(img, ((x0 * 3) + 2 * width) / 3 + 1, y0, x1, y1);
+  unsigned int middle = vjxx_sum_area(img, ((x0 * 3) + width) / 3, y0, ((x0 * 3) + 2 * width) / 3, y1);
+  unsigned int right = vjxx_sum_area(img, ((x0 * 3) + 2 * width) / 3, y0, x1, y1);
   return left + right - middle;
 }
 
@@ -55,7 +55,7 @@ int vjxx_haar_y3(
 ) {
   unsigned int height = y1 - y0;
   unsigned int top = vjxx_sum_area(img, x0, y0, x1, ((y0 * 3) + height) / 3);
-  unsigned int middle = vjxx_sum_area(img, x0, ((y0 * 3) + height) / 3 + 1, x1, ((y0 * 3) + 2 * height) / 3);
+  unsigned int middle = vjxx_sum_area(img, x0, ((y0 * 3) + height) / 3, x1, ((y0 * 3) + 2 * height) / 3);
   unsigned int bottom = vjxx_sum_area(img, x0, ((y0 * 3) + 2 * height) / 3, x1, y1);
   return top + bottom - middle;
 }
@@ -70,8 +70,8 @@ int vjxx_haar_x2y2(
   unsigned int width = x1 - x0;
   unsigned int height = y1 - y0;
   unsigned int top_left = vjxx_sum_area(img, x0, y0, ((x0 * 2) + width) / 2, ((y0 * 2) + height) / 2);
-  unsigned int top_right = vjxx_sum_area(img, ((x0 * 2) + width) / 2 + 1, y0, x1, ((y0 * 2) + height) / 2);
-  unsigned int bottom_left = vjxx_sum_area(img, x0, ((y0 * 2) + height) / 2 + 1, ((x0 * 2) + width) / 2, y1);
-  unsigned int bottom_right = vjxx_sum_area(img, ((x0 * 2) + width) / 2 + 1, ((y0 * 2) + height) / 2 + 1, x1, y1);
+  unsigned int top_right = vjxx_sum_area(img, ((x0 * 2) + width) / 2, y0, x1, ((y0 * 2) + height) / 2);
+  unsigned int bottom_left = vjxx_sum_area(img, x0, ((y0 * 2) + height) / 2, ((x0 * 2) + width) / 2, y1);
+  unsigned int bottom_right = vjxx_sum_area(img, ((x0 * 2) + width) / 2, ((y0 * 2) + height) / 2, x1, y1);
   return top_left + bottom_right - top_right - bottom_left;
 }

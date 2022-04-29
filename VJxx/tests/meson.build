@@ -52,7 +52,6 @@ test(
 		'haar_x3.c',
 		dependencies: vjxx_dep
 	),
-	should_fail: true,
 )
 test(
 	'Y3 Haar feature',

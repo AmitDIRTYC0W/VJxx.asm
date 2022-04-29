@@ -108,6 +108,59 @@ vjxx_haar_y2:
 	ret
 
 vjxx_haar_x3:
+	; Preserve registers.
+	push	ebp
+	mov	ebp, esp
+	push	ebx
+	push	esi
+	push	edi
+	
+	; Calculate the sum of the left area.
+	mov	ecx, dword [ebp + 24]		; ecx <- y0
+	mov	eax, dword [ebp + 32]		; eax <- height
+	add	eax, ecx			; eax <- y0 + height
+	push	eax				; y1	
+
+	mov     eax, 0xAAAAAAAB			; a magic number Clang always uses (0.AAAA... = ⅔)
+	mul	dword [ebp + 28]		; edx:eax <- width * ⅔
+	shr	edx, 1				; edx <- width / 3
+	mov	esi, edx			; esi <- width / 3
+	
+	mov	ebx, dword [ebp + 20]		; ebx <- x0
+	mov	eax, ebx			; eax <- x0
+	add	ebx, edx			; ebx <- x0 + width / 3
+	push	ebx				; x1
+	
+	push	ecx				; y0
+	push	eax				; x0
+	
+	push	dword [esp + 44]		; img.values
+	push	dword [esp + 44]		; img.height
+	push	dword [esp + 44]		; img.width
+	
+	call	vjxx_sum_area
+	mov	edi, eax			; edi <- left_value
+	neg	edi				; edi <- -left_value
+	
+	; Calculate the sum of the middle area.
+	mov	[esp + 12], ebx			; x0 <- x1
+	add	ebx, esi			; x1 <- x1 + width / 3
+	mov	[esp + 20], ebx			; x1
+	call	vjxx_sum_area
+	add	edi, eax			; edi <- -left_value + middle_value
+	
+	; Calculate the sum of the right area.
+	mov	[esp + 12], ebx			; x0 <- x1
+	mov	eax, dword [ebp + 20]		; eax <- x0
+	add	eax, dword [ebp + 28]		; eax <- x0 + width
+	mov	[esp + 20], eax			; x1
+	call	vjxx_sum_area
+	sub	eax, edi			; eax <- right_value - (middle_value - left_value)
+
+	pop	edi
+	pop	esi
+	pop	ebx
+	leave
 	ret
 
 vjxx_haar_y3:

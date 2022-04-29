@@ -9,69 +9,68 @@ int vjxx_haar_x2(
 	struct vjxx_integral_image img,
 	unsigned int x0,
 	unsigned int y0,
-	unsigned int x1,
-	unsigned int y1
+	unsigned int width,
+	unsigned int height
 ) {
-	unsigned int width = x1 - x0;
-	unsigned int left = vjxx_sum_area(img, x0, y0, ((x0 * 2) + width) / 2, y1);
-	unsigned int right = vjxx_sum_area(img, x0, y0, ((x0 * 2) + width) / 2, y1);
-  return left - right;
+	unsigned int half_width = width >> 1;
+	unsigned int left_value = vjxx_sum_area(img, x0, y0, x0 + half_width, y0 + height);
+	unsigned int right_value = vjxx_sum_area(img, x0 + half_width, y0, x0 + width, y0 + height);
+  return left_value - right_value;
 }
 
 int vjxx_haar_y2(
 	struct vjxx_integral_image img,
 	unsigned int x0,
 	unsigned int y0,
-	unsigned int x1,
-	unsigned int y1
+	unsigned int width,
+	unsigned int height
 ) {
-	unsigned int height = y1 - y0;
-	unsigned int top = vjxx_sum_area(img, x0, y0, x1, ((y0 * 2) + height) / 2);
-	unsigned int bottom = vjxx_sum_area(img, x0, ((y0 * 2) + height) / 2, x1, y1);
-	return top - bottom;
+	unsigned int half_height = height >> 1;
+	unsigned int top_value = vjxx_sum_area(img, x0, y0, x0 + height, y0 + half_height);
+	unsigned int bottom_value = vjxx_sum_area(img, x0, y0 + half_height, x0 + width, y0 + height);
+	return top_value - bottom_value;
 }
 
 int vjxx_haar_x3(
   struct vjxx_integral_image img,
   unsigned int x0,
   unsigned int y0,
-  unsigned int x1,
-  unsigned int y1
+  unsigned int width,
+  unsigned int height
 ) {
-  unsigned int width = x1 - x0;
-  unsigned int left = vjxx_sum_area(img, x0, y0, ((x0 * 3) + width) / 3, y1);
-  unsigned int middle = vjxx_sum_area(img, ((x0 * 3) + width) / 3, y0, ((x0 * 3) + 2 * width) / 3, y1);
-  unsigned int right = vjxx_sum_area(img, ((x0 * 3) + 2 * width) / 3, y0, x1, y1);
-  return left + right - middle;
+  unsigned int third_width = width / 3;
+  unsigned int left_value = vjxx_sum_area(img, x0, y0, x0 + third_width, y0 + height);
+  unsigned int middle_value = vjxx_sum_area(img, x0 + third_width, y0, x0 + third_width * 2, y0 + height);
+  unsigned int right_value = vjxx_sum_area(img, x0 + third_width * 2, y0, x0 + width, y0 + height);
+  return left_value + right_value - middle_value;
 }
-
 
 int vjxx_haar_y3(
   struct vjxx_integral_image img,
   unsigned int x0,
   unsigned int y0,
-  unsigned int x1,
-  unsigned int y1
+  unsigned int width,
+  unsigned int height
 ) {
-  unsigned int height = y1 - y0;
-  unsigned int top = vjxx_sum_area(img, x0, y0, x1, ((y0 * 3) + height) / 3);
-  unsigned int middle = vjxx_sum_area(img, x0, ((y0 * 3) + height) / 3, x1, ((y0 * 3) + 2 * height) / 3);
-  unsigned int bottom = vjxx_sum_area(img, x0, ((y0 * 3) + 2 * height) / 3, x1, y1);
-  return top + bottom - middle;
+  unsigned int third_height = height / 3;
+  unsigned int top_value = vjxx_sum_area(img, x0, y0, x0 + width, y0 + third_height);
+  unsigned int middle_value = vjxx_sum_area(img, x0, y0 + third_height, x0 + width, y0 + third_height * 2);
+  unsigned int bottom_value = vjxx_sum_area(img, x0, y0 + third_height * 2, x0 + width, y0 + height);
+  return top_value + bottom_value - middle_value;
 }
 
 int vjxx_haar_x2y2(
   struct vjxx_integral_image img,
   unsigned int x0,
   unsigned int y0,
-  unsigned int x1,
-  unsigned int y1
+  unsigned int width,
+  unsigned int height
 ) {
-  unsigned int width = x1 - x0;
-  unsigned int height = y1 - y0;
-  unsigned int top_left = vjxx_sum_area(img, x0, y0, ((x0 * 2) + width) / 2, ((y0 * 2) + height) / 2);
-  unsigned int top_right = vjxx_sum_area(img, ((x0 * 2) + width) / 2, y0, x1, ((y0 * 2) + height) / 2);
-  unsigned int bottom_left = vjxx_sum_area(img, x0, ((y0 * 2) + height) / 2, ((x0 * 2) + width) / 2, y1);
-  unsigned int bottom_right = vjxx_sum_area(img, ((x0 * 2) + width) / 2, ((y0 * 2) + height) / 2, x1, y1);
-  return top_left + bottom_right - top_right - bottom_left;
+  unsigned int half_width = width >> 1;
+  unsigned int half_height = height >> 1;
+  unsigned int top_left_value = vjxx_sum_area(img, x0, y0, x0 + half_width, y0 + half_height);
+  unsigned int top_right_value = vjxx_sum_area(img, x0 + half_width + 1, y0, x0 + width, y0 + half_height);
+  unsigned int bottom_left_value = vjxx_sum_area(img, x0, y0 + half_height + 1, x0 + half_width, y0 + height);
+  unsigned int bottom_right_value = vjxx_sum_area(img, x0 + half_width + 1, y0 + half_height + 1, x0 + width, y0 + height);
+  return top_left_value + bottom_right_value - top_right_value - bottom_left_value;
 }

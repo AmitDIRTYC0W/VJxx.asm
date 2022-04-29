@@ -1,10 +1,10 @@
 global vjxx_integrate_image
 global vjxx_sum_area
 
-section .text
-
 extern malloc
 extern memset
+
+section .text
 
 ; void vjxx_integrate_image(
 ; 	struct vjxx_integral_image * dst,

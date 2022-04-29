@@ -8,13 +8,6 @@ extern vjxx_sum_area
 
 section .text
 
-; int vjxx_haar_x2(
-;	struct vjxx_integral_image img,
-;	unsigned int x0,
-;	unsigned int y0,
-;	unsigned int width,
-;	unsigned int height
-; )
 vjxx_haar_x2:
 	; Preserve registers.
 	push	ebp

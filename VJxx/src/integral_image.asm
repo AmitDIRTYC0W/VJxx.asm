@@ -6,10 +6,6 @@ extern memset
 
 section .text
 
-; void vjxx_integrate_image(
-; 	struct vjxx_integral_image * dst,
-; 	struct vjxx_image src
-; )
 vjxx_integrate_image:
 	push	ebx
 	push	esi
@@ -95,13 +91,6 @@ vjxx_integrate_image:
         ;int3        
         ret
 
-; unsigned int vjxx_sum_area(
-;	vjxx_integral_image img,
-;	unsigned int x1,
-;	unsigned int y0,
-;	unsigned int x1,
-;	unsigned int y1
-; )
 vjxx_sum_area:
 	; Extract parameters into registers.
         push    ebx

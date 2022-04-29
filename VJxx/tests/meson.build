@@ -19,6 +19,7 @@ test(
 		'integral_image.c',
 		dependencies: vjxx_dep
 	),
+	should_fail: true,
 )
 test(
 	'Area summing',
@@ -51,6 +52,7 @@ test(
 		'haar_x3.c',
 		dependencies: vjxx_dep
 	),
+	should_fail: true,
 )
 test(
 	'Y3 Haar feature',
@@ -59,6 +61,7 @@ test(
 		'haar_y3.c',
 		dependencies: vjxx_dep
 	),
+	should_fail: true,
 )
 test(
 	'X2Y2 Haar feature',
@@ -67,4 +70,5 @@ test(
 		'haar_x2y2.c',
 		dependencies: vjxx_dep
 	),
+	should_fail: true,
 )

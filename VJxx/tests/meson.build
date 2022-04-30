@@ -60,7 +60,6 @@ test(
 		'haar_y3.c',
 		dependencies: vjxx_dep
 	),
-	should_fail: true,
 )
 test(
 	'X2Y2 Haar feature',

@@ -157,6 +157,59 @@ vjxx_haar_x3:
 	ret
 
 vjxx_haar_y3:
+	; Preserve registers.
+	push	ebp
+	mov	ebp, esp
+	push	ebx
+	push	esi
+	push	edi
+	
+	; Calculate the sum of the top area.
+	mov     eax, 0xAAAAAAAB			; a magic number Clang always uses (0.AAAA... = ⅔)
+	mul	dword [ebp + 32]		; edx:eax <- height * ⅔
+	shr	edx, 1				; edx <- height / 3
+	mov	esi, edx			; esi <- height / 3
+
+	mov	ebx, dword [ebp + 24]		; ebx <- y0
+	mov	edx, ebx			; edx <- y0
+	add	ebx, esi			; ebx <- y0 + height / 3
+	push	ebx				; y1
+
+	mov	ecx, dword [ebp + 20]		; ecx <- x0
+	mov	eax, dword [ebp + 28]		; eax <- width
+	add	eax, ecx			; eax <- x0 + width
+	push	eax				; x1	
+	
+	push	edx				; y0
+	push	ecx				; x0
+	
+	push	dword [esp + 44]		; img.values
+	push	dword [esp + 44]		; img.height
+	push	dword [esp + 44]		; img.width
+	
+	call	vjxx_sum_area
+	mov	edi, eax			; edi <- top_value
+	neg	edi				; edi <- -top_value
+	
+	; Calculate the sum of the middle area.
+	mov	[esp + 16], ebx			; y0 <- y1
+	add	ebx, esi			; y1 <- y1 + width / 3
+	mov	[esp + 24], ebx			; y1
+	call	vjxx_sum_area
+	add	edi, eax			; edi <- -top_value + middle_value
+	
+	; Calculate the sum of the bottom area.
+	mov	[esp + 16], ebx			; y0 <- y1
+	mov	eax, dword [ebp + 24]		; eax <- y0
+	add	eax, dword [ebp + 32]		; eax <- y0 + height
+	mov	[esp + 24], eax			; y1
+	call	vjxx_sum_area
+	sub	eax, edi			; eax <- bottom_value - (middle_value - top_value)
+
+	pop	edi
+	pop	esi
+	pop	ebx
+	leave
 	ret
 
 vjxx_haar_x2y2:

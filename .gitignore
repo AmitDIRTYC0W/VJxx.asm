@@ -2,3 +2,5 @@ asm-face
 *.o
 examples/*
 .buildconfig
+subprojects/*
+!/subprojects/spng.wrap

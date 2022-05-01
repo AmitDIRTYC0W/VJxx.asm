@@ -114,7 +114,7 @@ vjxx_haar_x3:
 	add	eax, ecx			; eax <- y0 + height
 	push	eax				; y1	
 
-	mov     eax, 0xAAAAAAAB			; a magic number Clang always uses (0.AAAA... = ⅔)
+	mov     eax, 0xAAAAAAAB			; I generated this using AMD's udiv.exe (0.AAAA... = ⅔)
 	mul	dword [ebp + 28]		; edx:eax <- width * ⅔
 	shr	edx, 1				; edx <- width / 3
 	mov	esi, edx			; esi <- width / 3
@@ -165,7 +165,7 @@ vjxx_haar_y3:
 	push	edi
 	
 	; Calculate the sum of the top area.
-	mov     eax, 0xAAAAAAAB			; a magic number Clang always uses (0.AAAA... = ⅔)
+	mov     eax, 0xAAAAAAAB			; I generated this using AMD's udiv.exe (0.AAAA... = ⅔)
 	mul	dword [ebp + 32]		; edx:eax <- height * ⅔
 	shr	edx, 1				; edx <- height / 3
 	mov	esi, edx			; esi <- height / 3

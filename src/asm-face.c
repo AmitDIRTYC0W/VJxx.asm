@@ -1,10 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include "VJxx/bmp.h"
-#include "VJxx/haar_features.h"
-#include "VJxx/integral_image.h"
+#include <spng.h>
 
 #define HELP_MESSAGE \
   "Usage: %s [FILE]\n" \
@@ -28,42 +25,45 @@ int main(int argc, char *argv[]) {
   } 
   
   // Read FILE.
-  FILE *f;
+  FILE *picutre_file;
   if (!strcmp("-", argv[1])) {
-    f = stdin;
+    picutre_file = stdin;
   } else {
-    f = fopen(argv[1], "rb");
+    picutre_file = fopen(argv[1], "rb");
   }
   
-  if (f == NULL) {
+  if (picutre_file == NULL) {
     perror("ERROR: cannot read FILE");
     return EXIT_FAILURE;
   }
   
-  // Load the picture to memory.
-  struct vjxx_image picture;
-  if (vjxx_read_bmp_file(f, &picture) > 0) {
+  // Decode the picture.
+  int status;
+  spng_ctx *spng_handle = spng_ctx_new(0);
+  
+  spng_set_png_file(spng_handle, picutre_file);
+  
+  struct spng_ihdr picture_ihdr;
+  if ((status = spng_get_ihdr(spng_handle, &picture_ihdr))) {
+    fprintf(stderr, "ERROR: cannot decode FILE: %s\n", spng_strerror(status));
+    spng_ctx_free(spng_handle);
+    fclose(picture_file);
     return EXIT_FAILURE;
   }
   
-  fclose(f);
+  size_t picture_buffer_size;
+  spng_decoded_image_size(spng_handle, SPNG_FMT_RGB8, &picture_buffer_size);
+  unsigned char *picture_buffer = malloc(picture_buffer_size);
   
-  // Calculate the integral image.
-  struct vjxx_integral_image integral_img;
-  if (vjxx_integrate_image(&integral_img, picture) > 0) {
-    free(picture.values);
+  status = spng_decode_image(spng_handle, picture_buffer, picture_buffer_size, SPNG_FMT_RGB8, 0);
+  spng_ctx_free(spng_handle);
+  fclose(picture_file);
+  if (status) {
+    fprintf(stderr, "ERROR: cannot decode FILE: %s\n", spng_strerror(status));
     return EXIT_FAILURE;
   }
-
-  free(picture.values);
-
-  printf("HAAR eyes: %d\n", vjxx_haar_y3(integral_img, 420, 440, 490, 480));
-  printf("HAAR face: %d\n", vjxx_haar_x3(integral_img, 980, 705, 1035, 750));
-  printf("HAAR legs/dress: %d\n", vjxx_haar_y2(integral_img, 421, 1026, 531, 1129));
-  printf("HAAR belt: %d\n", vjxx_haar_x2y2 (integral_img, 620, 630, 680, 725));
-  printf("HAAR cosplay thingy: %d\n", vjxx_haar_x2y2 (integral_img, 380, 570, 475, 666));
   
-  free(integral_img.values);
+  printf("Width: %d, height: %d\n", picture_ihdr.width, picture_ihdr.height);
   
   return 0;
 }

@@ -2,7 +2,6 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "VJxx/bmp.h"
 #include "VJxx/integral_image.h"
 
 #define IN_VALUES { \

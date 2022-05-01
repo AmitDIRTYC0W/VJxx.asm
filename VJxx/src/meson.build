@@ -1,5 +1,4 @@
 vjxx_src = [
-	'bmp.c',
 	#'haar_features.c',
 	#'integral_image.c',
 	'weak_classifier.c',

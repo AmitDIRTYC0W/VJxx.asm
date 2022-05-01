@@ -3,32 +3,25 @@
 #include <stdlib.h>
 #include <string.h>
 
-unsigned char vjxx_integrate_image(struct vjxx_integral_image *dst, struct vjxx_image src) {
-  dst->width = src.width + 1;
-  dst->height = src.height + 1;
+unsigned char vjxx_integrate_image(
+  struct vjxx_integral_image *dst,
+  unsigned char *values,
+  uint32_t width,
+  uint32_t height
+) {
+  dst->width = width + 1;
+  dst->height = height + 1;
     
-  dst->values = malloc(dst->width * dst->height * sizeof(*dst->values));
-  if (dst->values == NULL) {
-    perror("ERROR: Cannot allocate memory for the integral image");
-    return EXIT_FAILURE;
-  }
-  
-  // Create zero paddings.
-  for (unsigned int x = 0; x < dst->width; x++) {
-    dst->values[x] = 0;
-  }
-  for (unsigned int y = 1; y < dst->height; y++) {
-    dst->values[dst->width * y] = 0;
-  }
+  dst->values = calloc(dst->width * dst->height, sizeof(*dst->values));
   
   // Integrate the image
-  for (unsigned int y = 0; y < src.height; y++) {
-    for (unsigned int x = 0; x < src.width; x++) {
+  for (unsigned int y = 0; y < height; y++) {
+    for (unsigned int x = 0; x < width; x++) {
       dst->values[dst->width * (y + 1) + x + 1] =
-        src.values[src.width * y + x]
-        + dst->values[dst->width * (y + 1) + x]
+        values[3 * (width * y + x)]
+        - dst->values[dst->width * y + x]
         + dst->values[dst->width * y + x + 1]
-        - dst->values[dst->width * y + x];
+        + dst->values[dst->width * (y + 1) + x];
     }
   }
   
@@ -48,7 +41,3 @@ unsigned int vjxx_sum_area(
     - img.values[img.width * y1 + x0]
     + img.values[img.width * y0 + x0];
 }
-
-#undef SRC_PIXEL_MAX
-#undef INT_PIXEL_MAX
-#undef MAX_PIXELS

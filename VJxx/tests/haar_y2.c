@@ -2,7 +2,6 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "VJxx/bmp.h"
 #include "VJxx/haar_features.h"
 
 #define IN_VALUES { \

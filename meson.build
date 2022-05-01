@@ -15,5 +15,8 @@ add_project_arguments(
 	language: 'c',
 )
 
+spng_proj = subproject('spng')
+spng_dep = spng_proj.get_variable('spng_dep')
+
 subdir('VJxx')
 subdir('src')

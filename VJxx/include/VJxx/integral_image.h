@@ -1,7 +1,7 @@
 #ifndef VJXX_INTEGRAL_IMAGE_H_
 #define VJXX_INTEGRAL_IMAGE_H_
 
-#include "VJxx/bmp.h"
+#include <stdint.h>
 
 // See https://en.wikipedia.org/wiki/Summed-area_table.
 
@@ -15,7 +15,7 @@ struct vjxx_integral_image {
 };
 
 // This function generates integral images from regular images.
-unsigned char vjxx_integrate_image(struct vjxx_integral_image *, struct vjxx_image);
+void vjxx_integrate_image(struct vjxx_integral_image *, unsigned char *, uint32_t, uint32_t);
 
 // This function returns the sum of all the values in a given rectuangular area
 // in an image. The ranges are exclusive.

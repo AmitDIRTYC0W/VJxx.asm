@@ -1,14 +1,3 @@
-nasm = find_program('nasm')
-nasm_gen = generator(
-	nasm,
- 	output  : '@BASENAME@.o',
-	arguments : [
-		'-f', meson.get_external_property('nasm_format'),
-		'@INPUT@',
-		'-o', '@OUTPUT@'
-	]
-)
-
 vjxx_inc = include_directories('include')
 subdir('src')
 

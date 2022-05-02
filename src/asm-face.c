@@ -25,14 +25,14 @@ int main(int argc, char *argv[]) {
   } 
   
   // Read FILE.
-  FILE *picutre_file;
+  FILE *picture_file;
   if (!strcmp("-", argv[1])) {
-    picutre_file = stdin;
+    picture_file = stdin;
   } else {
-    picutre_file = fopen(argv[1], "rb");
+    picture_file = fopen(argv[1], "rb");
   }
   
-  if (picutre_file == NULL) {
+  if (picture_file == NULL) {
     perror("ERROR: cannot read FILE");
     return EXIT_FAILURE;
   }
@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
   int status;
   spng_ctx *spng_handle = spng_ctx_new(0);
   
-  spng_set_png_file(spng_handle, picutre_file);
+  spng_set_png_file(spng_handle, picture_file);
   
   struct spng_ihdr picture_ihdr;
   if ((status = spng_get_ihdr(spng_handle, &picture_ihdr))) {
@@ -62,8 +62,6 @@ int main(int argc, char *argv[]) {
     fprintf(stderr, "ERROR: cannot decode FILE: %s\n", spng_strerror(status));
     return EXIT_FAILURE;
   }
-  
-  printf("Width: %d, height: %d\n", picture_ihdr.width, picture_ihdr.height);
-  
+   
   return 0;
 }

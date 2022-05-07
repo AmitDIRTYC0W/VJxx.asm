@@ -3,6 +3,8 @@ global main
 extern strcmp
 extern printf
 extern malloc
+extern spng_ctx_new
+extern spng_set_png_buffer
 
 section .data
 invalid_usage_msg:	db	"ERROR: invalid usage", 0xa
@@ -14,7 +16,6 @@ help_msg:
 	
 	db	0xa
 	db	"  --help       display this help message and exit", 0xa, 0x0
-bf: db "AAAAAAAA"
 
 section .text
 
@@ -28,7 +29,7 @@ main:
 	je	.invalid_usage_exit		; continue.
 	
 	mov	eax, 0x4			; write syscall
-	mov	ebx, 1				; fd <- stderr ;;;;;;;;;;;;
+	mov	ebx, 2				; fd <- stderr ;;;;;;;;;;;;
 	mov	ecx, invalid_usage_msg		; buf
 	mov	edx, invalid_usage_msg_len	; count
 	int	0x80
@@ -64,7 +65,7 @@ main:
 	sub	esp, 0x58			; allocate an output buffer of size sizeof(struct stat)
 	mov	ecx, esp			; statbuf
 	int	0x80
-	mov	edx, [esp + 20]			; edx <- length of FILE in bytes
+	mov	edx, dword [esp + 20]		; edx <- length of FILE in bytes
 	add	esp, 0x58			; deallocate the output buffer
 	
 	; Allocate memory for FILE.
@@ -75,11 +76,24 @@ main:
 	mov	ecx, eax			; buffer
 	mov	eax, 0x3			; read syscall
 						; file descriptor 
-	pop	edx				; count <- length of FILE 
+	mov	edx, dword [esp]		; count <- length of FILE
 	int	0x80
 	
+	push	edx				; spng_set_png_buffer.size <- length of FILE
+	push	ecx				; spng_set_png_buffer.buf <- buffer
+	
+	; Create an spng context
+	push	0				; I don't know 😭
+	push	0				; flags
+	call	spng_ctx_new
+	int3
 	
 	
+	; Provide the buffer to spng
+	push	eax				; spng_set_png_buffer.ctx <- spng context
+	call	spng_set_png_buffer
+	
+	; 
 	
 .exit:
 	;int3

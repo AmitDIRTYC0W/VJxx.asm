@@ -3,6 +3,8 @@
 #include <string.h>
 #include <spng.h>
 
+#include "VJxx/model.h"
+
 #define HELP_MESSAGE \
   "Usage: %s [FILE]\n" \
   "Detect human faces in a picture.\n" \
@@ -62,6 +64,7 @@ int main(int argc, char *argv[]) {
     fprintf(stderr, "ERROR: cannot decode FILE: %s\n", spng_strerror(status));
     return EXIT_FAILURE;
   }
+   
    
   return 0;
 }

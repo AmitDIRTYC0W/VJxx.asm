@@ -3,7 +3,7 @@
 
 #include "integral_image.h"
 
-enum vjxx_feature {
+enum vjxx_feature_type {
   vjxx_feature_x2,
   vjxx_feature_y2,
   vjxx_feature_x3,
@@ -12,7 +12,7 @@ enum vjxx_feature {
 };
 
 int vjxx_haar_x2(
-  struct vjxx_integral_image,
+  vjxx_integral_image_t,
   unsigned int,
   unsigned int,
   unsigned int,
@@ -20,7 +20,7 @@ int vjxx_haar_x2(
 );
 
 int vjxx_haar_y2(
-  struct vjxx_integral_image,
+  vjxx_integral_image_t,
   unsigned int,
   unsigned int,
   unsigned int,
@@ -28,7 +28,7 @@ int vjxx_haar_y2(
 );
 
 int vjxx_haar_x3(
-  struct vjxx_integral_image,
+  vjxx_integral_image_t,
   unsigned int,
   unsigned int,
   unsigned int,
@@ -36,7 +36,7 @@ int vjxx_haar_x3(
 );
 
 int vjxx_haar_y3(
-  struct vjxx_integral_image,
+  vjxx_integral_image_t,
   unsigned int,
   unsigned int,
   unsigned int,
@@ -44,7 +44,7 @@ int vjxx_haar_y3(
 );
 
 int vjxx_haar_x2y2(
-  struct vjxx_integral_image,
+  vjxx_integral_image_t,
   unsigned int,
   unsigned int,
   unsigned int,

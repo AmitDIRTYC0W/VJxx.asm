@@ -17,7 +17,7 @@
 #define EXPECTED_VALUE -510
 
 int main() {
-  struct vjxx_integral_image integral_img;
+  vjxx_integral_image_t integral_img;
   integral_img.width = IN_WIDTH;
   integral_img.height = IN_HEIGHT;
   const unsigned int in_values[] = IN_VALUES;

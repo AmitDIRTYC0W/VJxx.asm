@@ -4,7 +4,7 @@
 #include <string.h>
 
 unsigned char vjxx_integrate_image(
-  struct vjxx_integral_image *dst,
+  vjxx_integral_image_t *dst,
   unsigned char *values,
   uint32_t width,
   uint32_t height
@@ -29,7 +29,7 @@ unsigned char vjxx_integrate_image(
 }
 
 unsigned int vjxx_sum_area(
-  struct vjxx_integral_image img,
+  vjxx_integral_image_t img,
   unsigned int x0,
   unsigned int y0,
   unsigned int x1,

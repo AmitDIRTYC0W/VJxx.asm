@@ -6,7 +6,7 @@
 // TODO Actually think about this code (i.e. maximum values and such).
 
 int vjxx_haar_x2(
-	struct vjxx_integral_image img,
+	vjxx_integral_image_t img,
 	unsigned int x0,
 	unsigned int y0,
 	unsigned int width,
@@ -19,7 +19,7 @@ int vjxx_haar_x2(
 }
 
 int vjxx_haar_y2(
-	struct vjxx_integral_image img,
+	vjxx_integral_image_t img,
 	unsigned int x0,
 	unsigned int y0,
 	unsigned int width,
@@ -32,7 +32,7 @@ int vjxx_haar_y2(
 }
 
 int vjxx_haar_x3(
-  struct vjxx_integral_image img,
+  vjxx_integral_image_t img,
   unsigned int x0,
   unsigned int y0,
   unsigned int width,
@@ -46,7 +46,7 @@ int vjxx_haar_x3(
 }
 
 int vjxx_haar_y3(
-  struct vjxx_integral_image img,
+  vjxx_integral_image_t img,
   unsigned int x0,
   unsigned int y0,
   unsigned int width,
@@ -60,7 +60,7 @@ int vjxx_haar_y3(
 }
 
 int vjxx_haar_x2y2(
-  struct vjxx_integral_image img,
+  vjxx_integral_image_t img,
   unsigned int x0,
   unsigned int y0,
   unsigned int width,

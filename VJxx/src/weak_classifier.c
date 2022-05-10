@@ -1,8 +1,8 @@
 #include "../include/VJxx/weak_classifier.h"
 
 bool vjxx_weak_classify(
-  struct vjxx_weak_classifier classifier,
-  struct vjxx_integral_image img
+  vjxx_weak_classifier_t classifier,
+  vjxx_integral_image_t img,
 ) {
   int value;
 

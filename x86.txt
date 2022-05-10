@@ -6,3 +6,4 @@ endian = 'little'
 
 [properties]
 nasm_format = 'elf32'
+

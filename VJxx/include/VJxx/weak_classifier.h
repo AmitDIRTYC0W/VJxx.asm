@@ -6,24 +6,28 @@
 #include "haar_features.h"
 #include "integral_image.h"
 
-struct vjxx_weak_classifier {
-  double alpha;
+typedef struct {
+  short alpha;
 
   int threshold;
 
-  bool parity;
+  char parity;
 
-  enum vjxx_feature feature;
+  enum vjxx_feature feature_type;
 
   unsigned int x0;
   unsigned int y0;
-  unsigned int x1;
-  unsigned int y1;
-};
+  unsigned int width;
+  unsigned int height;
+} vjxx_weak_classifier_t;
 
 bool vjxx_weak_classify(
-  struct vjxx_weak_classifier,
-  struct vjxx_integral_image
+  vjxx_weak_classifier_t,
+  vjxx_integral_image_t,
+  unsigned int,
+  unsigned int,
+  unsigned int,
+  unsigned char
 );
 
 #endif

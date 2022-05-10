@@ -33,7 +33,7 @@
 int main() {
   unsigned char in_values[] = IN_VALUES;
 
-  struct vjxx_integral_image integral_img;
+  vjxx_integral_image_t integral_img;
   integral_img.width = 69;
   vjxx_integrate_image(&integral_img, in_values, IN_WIDTH, IN_HEIGHT);
   

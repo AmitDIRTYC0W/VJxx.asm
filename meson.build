@@ -26,7 +26,7 @@ nasm_gen = generator(
 	]
 )
 
-spng_proj = subproject('spng')
+spng_proj = subproject('spng', default_options:['enable_opt=false'])
 spng_dep = spng_proj.get_variable('spng_dep')
 
 subdir('VJxx')

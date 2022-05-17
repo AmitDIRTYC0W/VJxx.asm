@@ -3,31 +3,23 @@
 
 #include <stdbool.h>
 
-#include "haar_features.h"
 #include "integral_image.h"
+#include "area.h"
 
 typedef struct {
-  short alpha;
+	unsigned char feature_length;
 
-  int threshold;
+	int threshold;
 
-  char parity;
-
-  enum vjxx_feature feature_type;
-
-  unsigned int x0;
-  unsigned int y0;
-  unsigned int width;
-  unsigned int height;
+	short alpha_negative, alpha_positive;
 } vjxx_weak_classifier_t;
 
-bool vjxx_weak_classify(
-  vjxx_weak_classifier_t,
-  vjxx_integral_image_t,
-  unsigned int,
-  unsigned int,
-  unsigned int,
-  unsigned char
+short vjxx_weak_classify(
+	vjxx_weak_classifier_t classifier,
+	vjxx_area_t *area_cursor,
+	vjxx_integral_image_t picture,
+	unsigned int x0,
+	unsigned int y0
 );
 
 #endif

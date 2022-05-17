@@ -17,6 +17,9 @@ import tqdm
 
 import matplotlib.pyplot as plt
 
+VALUE_BS = 4
+ALPHA_BS = 4
+
 class Rectangle:
     def __init__(
         self,
@@ -55,6 +58,16 @@ class Rectangle:
         x0, y0, width, height, weight = [int(_) for _ in line.split(' ')[-5:]]
 
         return Rectangle(x0, y0, width, height, weight)
+
+    def pack(self) -> bytes:
+        return struct.pack(
+            '5b',
+            self.x0,
+            self.y0,
+            self.width,
+            self.height,
+            self.weight
+        )
 
 class WeakClassifier:
     """
@@ -100,13 +113,22 @@ class WeakClassifier:
 
         return WeakClassifier(feature, activations, threshold)
 
+    def pack(self) -> bytes:
+        return struct.pack(
+            'I i 2h',
+            len(self.feature),
+            int(self.threshold * (1 << VALUE_BS)),
+            int(self.activations[0] * (1 << ALPHA_BS)),
+            int(self.activations[1] * (1 << ALPHA_BS))
+        )
+
 class StrongClassifier:
     """
     A set of weak features, for together they are powerful!
     """
 
     def __init__(self, classifiers: list[WeakClassifier], threshold: float):
-        self.threshold = threshold * 0.6 ######################################
+        self.threshold = threshold ######################################
         self.classifiers = classifiers
 
     def __call__(
@@ -130,6 +152,13 @@ class StrongClassifier:
         ]
 
         return StrongClassifier(classifiers, threshold)
+
+    def pack(self) -> bytes:
+        return struct.pack(
+            'I i',
+            len(self.classifiers),
+            int(self.threshold * (1 << ALPHA_BS))
+        )
 
 class CascadeClassifier:
     """
@@ -189,6 +218,12 @@ class CascadeClassifier:
 
         return CascadeClassifier(stages, filterSize)
 
+    def pack(self) -> bytes:
+        return struct.pack(
+            'I',
+            len(self.stages)
+        )
+
 if __name__ == '__main__':
     # Parse arguments.
     argsParser = argparse.ArgumentParser(
@@ -199,39 +234,10 @@ if __name__ == '__main__':
         type=argparse.FileType('rb'),
         help='An OpenCV cascade classifier XML file'
     )
-    argsParser.add_argument(
-        'picture',
-        type=argparse.FileType('rb'),
-        help='The picture to find the faces in'
-    )
-    args = argsParser.parse_args(
-        [
-            '/home/durden/Documents/Projects/asm-face/VJxx.py/haarcascade_frontalface_default.xml',
-            '/home/durden/Documents/Projects/asm-face/VJxx.py/53_2.png'
-        ]
-    )
+    args = argsParser.parse_args()
 
     # Parse the XML file.
     elementTree = etree.parse(args.classifier)
     cascadeElement = elementTree.find('./cascade')
 
     cascade = CascadeClassifier.fromXML(cascadeElement)
-
-    # Open the picture.
-    picture = np.frombuffer(args.picture.read(), dtype=np.uint8)
-    picture = cv2.imdecode(picture, cv2.IMREAD_GRAYSCALE)
-    toplot = np.array(picture)
-
-    # Pre-process it.
-    picture = cv2.integral(picture)
-
-    picture_dim = min(picture.shape)
-    for size in range(int(0.7 * picture_dim), picture_dim, int(0.05 * picture_dim)):
-        scale = size / cascade.filterSize
-        for y in tqdm.trange(0, picture.shape[0] - size, int(0.03 * picture_dim)):
-            for x in range(0, picture.shape[1] - size, int(0.03 * picture_dim)):
-                if cascade(picture, (x, y, scale)):
-                    print(x, y, size)
-                    toplot = cv2.rectangle(toplot, (x, y), (x + size, y + size), (255, 0, 0), 2)
-
-    plt.imshow(toplot)

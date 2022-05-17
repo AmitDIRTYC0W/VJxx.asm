@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-unsigned char vjxx_integrate_image(
+void vjxx_integrate_image(
   vjxx_integral_image_t *dst,
   unsigned char *values,
   uint32_t width,
@@ -24,20 +24,5 @@ unsigned char vjxx_integrate_image(
         + dst->values[dst->width * (y + 1) + x];
     }
   }
-  
-  return EXIT_SUCCESS;
 }
 
-unsigned int vjxx_sum_area(
-  vjxx_integral_image_t img,
-  unsigned int x0,
-  unsigned int y0,
-  unsigned int x1,
-  unsigned int y1
-) {
-  return
-    img.values[img.width * y1 + x1]
-    - img.values[img.width * y0 + x1]
-    - img.values[img.width * y1 + x0]
-    + img.values[img.width * y0 + x0];
-}

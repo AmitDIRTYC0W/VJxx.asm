@@ -6,17 +6,19 @@
 #include "integral_image.h"
 #include "weak_classifier.h"
 
-#define NO_WEAK_CLASSIFIERS 128
-
 typedef struct {
-  vjxx_weak_classifier_t classifiers[NO_WEAK_CLASSIFIERS];
+	unsigned char no_weak_classifiers;
+
+	int threshold;
 } vjxx_strong_classifier_t;
 
 bool vjxx_strong_classify(
-  vjxx_strong_classifier_t,
-  vjxx_integral_image_t,
-  unsigned int,
-  unsigned char
+	vjxx_strong_classifier_t classifier,
+	vjxx_area_t *area_cursor,
+	vjxx_weak_classifier_t *weak_classifier_cursor,
+	vjxx_integral_image_t picture,
+	unsigned int x0,
+	unsigned int y0
 );
 
 #endif

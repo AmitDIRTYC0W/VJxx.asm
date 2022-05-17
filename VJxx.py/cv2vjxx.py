@@ -8,8 +8,15 @@ Created on Fri May 13 10:48:25 2022
 
 import argparse
 from lxml import etree
+import os
 
 import VJxx
+
+def isDirectory(string):
+    if os.path.isdir(string):
+        return string
+    else:
+        raise NotADirectoryError(string)
 
 if __name__ == '__main__':
     # Parse arguments.
@@ -23,9 +30,10 @@ if __name__ == '__main__':
     )
     argsParser.add_argument(
         'output',
-        type=argparse.FileType('wb'),
-        help='The output file to be incorporated into the binary'
+        type=isDirectory,
+        help='The VJxx src directory to write the output to'
     )
+
     args = argsParser.parse_args()
 
     # Parse the XML file.
@@ -34,4 +42,17 @@ if __name__ == '__main__':
 
     cascade = VJxx.CascadeClassifier.fromXML(cascadeElement)
 
-    print(cascade.stages[0].classifiers[0].feature[0].weight)
+    with open('{}/cascade_classifier.vjxx.bin'.format(args.output), 'wb') as f:
+        f.write(cascade.pack())
+
+    strongClassifiers = cascade.stages
+    with open('{}/strong_classifiers.vjxx.bin'.format(args.output), 'wb') as f:
+        f.write(b''.join([c.pack() for c in strongClassifiers]))
+
+    weakClassifiers = [wc for sc in strongClassifiers for wc in sc.classifiers]
+    with open('{}/weak_classifiers.vjxx.bin'.format(args.output), 'wb') as f:
+        f.write(b''.join([c.pack() for c in weakClassifiers]))
+
+    areas = [a for wc in weakClassifiers for a in wc.feature]
+    with open('{}/area.vjxx.bin'.format(args.output), 'wb') as f:
+        f.write(b''.join([a.pack() for a in areas]))

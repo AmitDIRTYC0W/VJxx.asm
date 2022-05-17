@@ -17,14 +17,4 @@ typedef struct {
 // This function generates integral images from regular images.
 void vjxx_integrate_image(vjxx_integral_image_t *, unsigned char *, uint32_t, uint32_t);
 
-// This function returns the sum of all the values in a given rectuangular area
-// in an image. The ranges are exclusive.
-unsigned int vjxx_sum_area(
-  vjxx_integral_image_t,
-  unsigned int,
-  unsigned int,
-  unsigned int,
-  unsigned int
-);
-
 #endif

@@ -1,6 +1,19 @@
+# binaries
 asm-face
 *.o
+
+# python
+*.pyc
+
+# pictures
 examples/*
-.buildconfig
+
+# models
+./VJxx/model/*.vjxx.bin
+
+# Meson subprojects
 subprojects/*
 !/subprojects/spng.wrap
+
+# IDEs configuration files
+.buildconfig

@@ -1,13 +1,13 @@
 vjxx_src = [
-	'haar_features.c',
-	#'integral_image.c',
+	'integral_image.c',
+	'area.c',
 	'weak_classifier.c',
 	'strong_classifier.c',
+	'cascade_classifier.c',
 ]
 
 vjxx_src += nasm_gen.process([
-	'integral_image.asm',
-	#'haar_features.asm',
+	#'integral_image.asm',
 	'model.asm',
 ])
 

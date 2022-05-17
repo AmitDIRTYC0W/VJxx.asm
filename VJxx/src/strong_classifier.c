@@ -1,21 +1,22 @@
 #include "VJxx/strong_classifier.h"
 
+#include "VJxx/integral_image.h"
 #include "VJxx/weak_classifier.h"
 
 bool vjxx_strong_classify(
   vjxx_strong_classifier_t classifier,
-  vjxx_integral_image_t image,
-  unsigned int scale,
-  unsigned char scale_shift // TODO: Make scale_shift constanttttt
+  vjxx_area_t *area_cursor,
+  vjxx_weak_classifier_t *weak_classifier_cursor,
+  vjxx_integral_image_t picture,
+  unsigned int x0,
+  unsigned int y0
 ) {
-  int sum = 0;
-
-  for (size_t i = 0; i < NO_WEAK_CLASSIFIERS; i++) {
-    // TODO Use branchless programming.
-    if (vjxx_weak_classify(classifier.classifiers[i], image, scale, scale_shift)) {
-      sum += classifier.classifiers[i].alpha;
-    }
+  int value = 0;
+  for (unsigned char i = 0; i < classifier.no_weak_classifiers; i++) {
+    value += vjxx_weak_classify(*weak_classifier_cursor, area_cursor, picture, x0, y0);
+    weak_classifier_cursor++;
   }
 
-  return sum > 0;
+  printf("wert.: %d\tschwelle.: %d\n", value, classifier.threshold);
+  return value <= classifier.threshold;
 }
